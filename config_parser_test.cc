@@ -21,7 +21,7 @@ TEST_F(NginxConfigParserTest, SimpleConfig) {
   EXPECT_TRUE(success);
 }
 
-TEST_F(NginxConfigParserTest, foobar){
+TEST_F(NginxConfigParserTest, missMatchBrakets){
   std::string config_string = "foo { bar; ";
   std::stringstream config_stream(config_string);
   EXPECT_FALSE(parser.Parse(&config_stream, &out_config));
