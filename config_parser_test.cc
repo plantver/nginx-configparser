@@ -76,3 +76,10 @@ TEST_F(NginxConfigParserTest, emptyConfig ){
   std::stringstream config_stream(config_string);
   EXPECT_FALSE(parser.Parse(&config_stream, &out_config));
 }
+
+// BUG: nested brackets not supported
+TEST_F(NginxConfigParserTest, nestedBrackets ){
+  std::string config_string = "a { b { c; } }";
+  std::stringstream config_stream(config_string);
+  EXPECT_TRUE(parser.Parse(&config_stream, &out_config));
+}
