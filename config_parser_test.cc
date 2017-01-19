@@ -21,6 +21,7 @@ TEST_F(NginxConfigParserTest, SimpleConfig) {
   EXPECT_TRUE(success);
 }
 
+
 // Known bug
 TEST_F(NginxConfigParserTest, missMatchBrakets){
   std::string config_string = "foo { bar; ";
@@ -77,15 +78,29 @@ TEST_F(NginxConfigParserTest, emptyConfig ){
   EXPECT_FALSE(parser.Parse(&config_stream, &out_config));
 }
 
-// BUG: nested brackets not supported
-TEST_F(NginxConfigParserTest, nestedBrackets1 ){
-  std::string config_string = "a { b { c; } }";
+// The following cases deal with nested brackets
+// The original code is not working for nested brackets
+TEST_F(NginxConfigParserTest, nestedBracketConfig1 ){
+  std::string config_string = "a {b {c;}}";
   std::stringstream config_stream(config_string);
   EXPECT_TRUE(parser.Parse(&config_stream, &out_config));
 }
 
+
 TEST_F(NginxConfigParserTest, nestedBrackets2 ){
   std::string config_string = "a { b { c; } d; }";
+  std::stringstream config_stream(config_string);
+  EXPECT_TRUE(parser.Parse(&config_stream, &out_config));
+}
+
+TEST_F(NginxConfigParserTest, nestedBracketConfig2 ){
+  std::string config_string = "a {b {c;d {e;}}}";
+  std::stringstream config_stream(config_string);
+  EXPECT_TRUE(parser.Parse(&config_stream, &out_config));
+}
+
+TEST_F(NginxConfigParserTest, nestedBracketConfig3 ){
+  std::string config_string = "a {b {c;d {e;}}} f {g;}";
   std::stringstream config_stream(config_string);
   EXPECT_TRUE(parser.Parse(&config_stream, &out_config));
 }
